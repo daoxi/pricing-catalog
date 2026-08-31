@@ -10,8 +10,8 @@
 ## Rules (Do's and Don'ts)
 
 ### Pattern
-- Keep the code clean, easy to understand, and write sufficient and concise comments to explain what each block of code does
-- Split big monolithic code and organize it into reusable components/modules when suitable
+- Keep the code clean, easy to understand, and write sufficient comments to explain what each block of code does.
+- Split big monolithic code and organize it into reusable components/modules when suitable, use the root page component primarily for structuring child components.
 - Prefer small, focused changes over broad refactors. Do not modify unrelated files.
 - Minimize any unnecessary extra code, avoid scope creep and don't include any part I didn't specifically ask for.
 
@@ -22,9 +22,9 @@
 - Let TypeScript infer obvious local variable types, avoid unnecessary type assertions (`as`).
 
 ### Other
-- Exclusively only use Tailwind CSS for component styling and keep it simple, avoid or minimize custom CSS if possible
-- Avoid using in-line SVGs for icons, instead use icons from a consistent icon set (such as Lucide Icons) from react-icons
-- Test (using Playwright and Axe) to make sure the rendered page is accessibility compliant for WCAG 2.1 Level AA
+- Exclusively only use Tailwind CSS for component styling and keep it simple, avoid or minimize custom CSS if possible.
+- Avoid using in-line SVGs for icons, instead use icons from a consistent icon set (such as Lucide Icons) from react-icons.
+- Prefer `async`/`await` over `then`/`catch`/`finally` for asynchronous operations.
 
 <!-- The following instructions are generated from create-next-app -->
 
