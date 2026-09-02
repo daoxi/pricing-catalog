@@ -51,20 +51,60 @@ export function ProductDetails({ product }: { product: Product }) {
         <FiArrowLeft aria-hidden="true" /> Back to catalog
       </Link>
 
-      <article className="grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:grid-cols-2">
-        <div className="relative min-h-80 border-b border-slate-100 bg-slate-50 sm:min-h-120 lg:border-r lg:border-b-0">
+      <article
+        className={`grid overflow-hidden rounded-3xl border shadow-sm transition-colors lg:grid-cols-2 ${
+          isAuthenticated
+            ? "border-teal-500/40 bg-slate-900 shadow-teal-950/10"
+            : "border-slate-200 bg-white"
+        }`}
+      >
+        <div
+          className={`relative min-h-80 border-b sm:min-h-120 lg:border-r lg:border-b-0 ${
+            isAuthenticated ? "border-slate-700 bg-teal-50" : "border-slate-100 bg-slate-50"
+          }`}
+        >
           <ProductImage image={product.image} productTitle={product.title} priority />
         </div>
         <div className="p-6 sm:p-10 lg:p-12">
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">{product.category}</span>
-            {product.cardSet === "B" && <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-bold text-teal-800">Member only</span>}
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-bold ${
+                isAuthenticated ? "bg-slate-800 text-teal-100" : "bg-slate-100 text-slate-700"
+              }`}
+            >
+              {product.category}
+            </span>
+            {product.cardSet === "B" && (
+              <span className="rounded-full bg-teal-400 px-3 py-1 text-xs font-bold text-slate-950">Member only</span>
+            )}
           </div>
-          <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">{product.title}</h1>
-          {product.description && <p className="mt-4 leading-7 text-slate-600">{product.description}</p>}
+          <h1
+            className={`mt-4 text-3xl font-black tracking-tight sm:text-4xl ${
+              isAuthenticated ? "text-white" : "text-slate-950"
+            }`}
+          >
+            {product.title}
+          </h1>
+          {product.description && (
+            <p className={`mt-4 leading-7 ${isAuthenticated ? "text-slate-300" : "text-slate-600"}`}>
+              {product.description}
+            </p>
+          )}
 
-          <div className="my-8 rounded-2xl bg-slate-950 p-5 text-white">
-            <p className="text-xs font-bold tracking-[0.15em] text-teal-300 uppercase">{isAuthenticated ? "Member price" : "Public price"}</p>
+          <div
+            className={`my-8 rounded-2xl border p-5 ${
+              isAuthenticated
+                ? "border-teal-500/40 bg-slate-900 text-white"
+                : "border-slate-200 bg-white text-slate-950 shadow-sm"
+            }`}
+          >
+            <p
+              className={`text-xs font-bold tracking-[0.15em] uppercase ${
+                isAuthenticated ? "text-teal-300" : "text-teal-700"
+              }`}
+            >
+              {isAuthenticated ? "Member price" : "Public price"}
+            </p>
             <div className="mt-1 flex items-baseline gap-3">
               <p className="text-4xl font-black tracking-tight">{formatPrice(price)}</p>
               {isAuthenticated && product.priceAuthenticated < product.priceLoggedOut && (
@@ -74,12 +114,23 @@ export function ProductDetails({ product }: { product: Product }) {
           </div>
 
           <section aria-labelledby="specifications-heading">
-            <h2 id="specifications-heading" className="text-xl font-bold text-slate-950">Full specifications</h2>
-            <dl className="mt-4 divide-y divide-slate-100 border-y border-slate-100">
+            <h2
+              id="specifications-heading"
+              className={`text-xl font-bold ${isAuthenticated ? "text-white" : "text-slate-950"}`}
+            >
+              Full specifications
+            </h2>
+            <dl
+              className={`mt-4 divide-y border-y ${
+                isAuthenticated ? "divide-slate-700 border-slate-700" : "divide-slate-100 border-slate-100"
+              }`}
+            >
               {specifications.map(([label, value]) => (
                 <div key={label} className="grid grid-cols-[120px_1fr] gap-4 py-3.5 text-sm sm:grid-cols-[150px_1fr]">
-                  <dt className="font-semibold text-slate-500">{label}</dt>
-                  <dd className="text-right font-medium text-slate-900">{value ?? "Not listed"}</dd>
+                  <dt className={`font-semibold ${isAuthenticated ? "text-slate-400" : "text-slate-500"}`}>{label}</dt>
+                  <dd className={`text-right font-medium ${isAuthenticated ? "text-slate-100" : "text-slate-900"}`}>
+                    {value ?? "Not listed"}
+                  </dd>
                 </div>
               ))}
             </dl>
