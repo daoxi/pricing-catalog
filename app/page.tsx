@@ -1,4 +1,4 @@
-import { CatalogBrowser } from "@/components/catalog-browser";
+import { CatalogFilter } from "@/components/catalog-filter";
 import { CmsErrorState } from "@/components/cms-error-state";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -28,7 +28,7 @@ export default async function HomePage() {
         {catalog.status === "error" ? (
           <div className="px-4 sm:px-6"><CmsErrorState /></div>
         ) : (
-          <CatalogBrowser products={catalog.products} cmsLayouts={catalog.layouts} />
+          <CatalogFilter products={catalog.products} cmsLayouts={catalog.layouts} />
         )}
       </main>
       <SiteFooter />

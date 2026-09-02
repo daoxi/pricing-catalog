@@ -40,12 +40,12 @@ function useSavedLayout(defaultLayout: CatalogLayout) {
   );
 }
 
-interface CatalogBrowserProps {
+interface CatalogFilterProps {
   products: Product[];
   cmsLayouts: CatalogLayout[];
 }
 
-export function CatalogBrowser({ products, cmsLayouts }: CatalogBrowserProps) {
+export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
   const { isAuthenticated } = useAuthentication();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
