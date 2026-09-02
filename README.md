@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PocketPrice
 
-## Getting Started
+A statically generated smartphone pricing catalog built with Next.js, Contentful, TypeScript, and Tailwind CSS.
 
-First, run the development server:
+## Local development
+
+Copy `.env.example` to `.env.local`, add the Contentful delivery credentials and a long random revalidation secret, then run:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contentful ISR webhook
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The catalog uses eager on-demand regeneration for Contentful changes. Create a Contentful webhook with:
 
-## Learn More
+- Method: `POST`
+- URL: `https://YOUR_DOMAIN/api/revalidate?secret=YOUR_CONTENTFUL_REVALIDATE_SECRET`
+- Triggers: publish, unpublish, and delete events for Product and Layout Option entries
+- Payload: Contentful's default entry payload
 
-To learn more about Next.js, take a look at the following resources:
+Product events revalidate the homepage and the matching `/products/{slug}` page. Layout Option events revalidate the homepage. For a custom or deletion payload that does not include `fields.slug`, append `&slug=product-slug` to revalidate that product path explicitly.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For local testing, use:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+http://localhost:3000/api/revalidate?secret=YOUR_CONTENTFUL_REVALIDATE_SECRET
+```
 
-## Deploy on Vercel
+Do not expose the secret in client-side code or commit it to the repository.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Validation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
