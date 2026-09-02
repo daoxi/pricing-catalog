@@ -22,7 +22,7 @@ The catalog uses eager on-demand regeneration for Contentful changes. Create a C
 - Triggers: publish, unpublish, and delete events for Product and Layout Option entries
 - Payload: Contentful's default entry payload
 
-Product events revalidate the homepage and the matching `/products/{slug}` page. Layout Option events revalidate the homepage. For a custom or deletion payload that does not include `fields.slug`, append `&slug=product-slug` to revalidate that product path explicitly.
+Product events revalidate the homepage and the matching `/products/{slug}` page. Layout Option events revalidate the homepage.
 
 For local testing, use:
 
