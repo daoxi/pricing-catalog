@@ -4,10 +4,10 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { FiLogIn, FiLogOut, FiShield, FiX } from "react-icons/fi";
 
-import { demoCredentials, useCatalogSession } from "@/components/catalog-provider";
+import { demoCredentials, useAuthentication } from "@/components/authentication";
 
 export function SiteHeader() {
-  const { isAuthenticated, login, logout } = useCatalogSession();
+  const { isAuthenticated, login, logout } = useAuthentication();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [email, setEmail] = useState(demoCredentials.email);
   const [password, setPassword] = useState(demoCredentials.password);

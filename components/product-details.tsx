@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FiArrowLeft, FiLock } from "react-icons/fi";
 
-import { useCatalogSession } from "@/components/catalog-provider";
+import { useAuthentication } from "@/components/authentication";
 import { ProductImage } from "@/components/product-image";
 import type { Product } from "@/lib/catalog-types";
 
@@ -16,7 +16,7 @@ function formatPrice(price: number) {
 }
 
 export function ProductDetails({ product }: { product: Product }) {
-  const { isAuthenticated } = useCatalogSession();
+  const { isAuthenticated } = useAuthentication();
 
   if (product.cardSet === "B" && !isAuthenticated) {
     return (
