@@ -6,8 +6,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "PocketPrice | Smartphone catalog",
-    template: "%s | PocketPrice",
+    default: "Pricing Catalog",
+    template: "%s | Pricing Catalog",
   },
   description: "Compare smartphone prices and essential specifications.",
 };

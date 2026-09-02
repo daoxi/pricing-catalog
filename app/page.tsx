@@ -20,7 +20,7 @@ export default async function HomePage() {
               The right phone, at the right price.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-              Compare the essentials, find your fit, and log in to unlock member-only phones and pricing.
+              Compare the key specs, find your fit, and log in to unlock member-only pricing.
             </p>
           </div>
         </section>

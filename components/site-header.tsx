@@ -30,8 +30,8 @@ export function SiteHeader() {
       <header className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex min-h-18 max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <Link href="/" className="cursor-pointer rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal-600">
-            <span className="block text-lg font-bold tracking-tight text-slate-950">PocketPrice</span>
-            <span className="block text-[11px] font-semibold tracking-[0.18em] text-teal-700 uppercase">Phone catalog</span>
+            <span className="block text-3xl font-bold text-slate-950">Pricing Catalog</span>
+            <span className="block text-lg font-semibold text-teal-700">Browse smartphone prices</span>
           </Link>
 
           <div className="flex items-center gap-2">
@@ -85,9 +85,9 @@ export function SiteHeader() {
               <FiX aria-hidden="true" />
             </button>
             <div className="mb-6 pr-10">
-              <p className="mb-2 text-xs font-bold tracking-[0.16em] text-teal-700 uppercase">Demo account</p>
+              <p className="mb-2 text-xs font-bold tracking-[0.16em] text-teal-700 uppercase">Account Login</p>
               <h2 id="login-title" className="text-2xl font-bold tracking-tight text-slate-950">Unlock member offers</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">Use the prefilled demo credentials to view authenticated pricing and Set B products.</p>
+              <p className="mt-2 text-sm leading-6 text-slate-600">Use the prefilled demo credentials to view authenticated pricing.</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
