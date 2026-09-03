@@ -171,68 +171,58 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
       </div>
 
       {/* Result count and presentation controls sit outside the filter card. */}
-      <div className="my-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="my-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p aria-live="polite" className="text-sm font-semibold text-slate-600">
           <span className="text-slate-950">{filteredProducts.length}</span>{" "}
           {filteredProducts.length === 1 ? "phone" : "phones"} found
         </p>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
-          <label className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-2 pr-3 shadow-sm transition hover:border-slate-300 hover:shadow-md focus-within:border-teal-600 focus-within:ring-3 focus-within:ring-teal-100">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
-              <FiDollarSign aria-hidden="true" />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6 md:ml-auto md:justify-end">
+          <label className="group block lg:flex lg:items-center lg:gap-3">
+            <span className="flex items-center gap-1.5 whitespace-nowrap text-xs font-bold tracking-[0.08em] text-slate-600 uppercase">
+              <FiDollarSign aria-hidden="true" className="text-teal-700" /> Sort by price
             </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-[0.65rem] leading-none font-bold tracking-[0.12em] text-slate-500 uppercase">
-                Sort by price
-              </span>
-              <span className="relative mt-1 block">
-                <select
-                  value={sortOrder}
-                  onChange={(event) => {
-                    if (isSortOrder(event.target.value)) {
-                      setSortOrder(event.target.value);
-                    }
-                  }}
-                  className="w-full cursor-pointer appearance-none rounded-lg border border-slate-200 bg-white py-1 pr-7 pl-2 text-sm font-bold text-slate-900 outline-none transition hover:border-slate-300 sm:w-40"
-                >
-                  <option value="default">Default order</option>
-                  <option value="price-asc">Low to high</option>
-                  <option value="price-desc">High to low</option>
-                </select>
-                <FiChevronDown
-                  aria-hidden="true"
-                  className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-slate-400 transition group-focus-within:text-teal-700"
-                />
-              </span>
+            <span className="relative mt-2 block lg:mt-0">
+              <select
+                value={sortOrder}
+                onChange={(event) => {
+                  if (isSortOrder(event.target.value)) {
+                    setSortOrder(event.target.value);
+                  }
+                }}
+                className="h-11 w-full cursor-pointer appearance-none rounded-xl border border-slate-300 bg-white pr-10 pl-4 text-sm font-semibold text-slate-900 outline-none transition hover:border-slate-400 hover:bg-slate-50 focus:border-teal-600 focus:ring-3 focus:ring-teal-100 sm:w-52"
+              >
+                <option value="default">Default order</option>
+                <option value="price-asc">Low to high</option>
+                <option value="price-desc">High to low</option>
+              </select>
+              <FiChevronDown
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-slate-400 transition group-focus-within:text-teal-700"
+              />
             </span>
           </label>
 
-          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm transition hover:border-slate-300 hover:shadow-md">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
-              <FiGrid aria-hidden="true" />
+          <div className="lg:flex lg:items-center lg:gap-3">
+            <span className="flex items-center gap-1.5 whitespace-nowrap text-xs font-bold tracking-[0.08em] text-slate-600 uppercase">
+              <FiGrid aria-hidden="true" className="text-teal-700" /> Card layout
             </span>
-            <div>
-              <span className="block text-[0.65rem] leading-none font-bold tracking-[0.12em] text-slate-500 uppercase">
-                Card layout
-              </span>
-              <div className="mt-1 flex gap-1" role="group" aria-label="Product card layout">
-                {layouts.map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => changeLayout(option)}
-                    aria-pressed={layout === option}
-                    className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 sm:px-3 ${
-                      layout === option
-                        ? "bg-slate-900 text-white shadow-sm"
-                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
+            <div className="mt-2 flex gap-2 lg:mt-0" role="group" aria-label="Product card layout">
+              {layouts.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => changeLayout(option)}
+                  aria-pressed={layout === option}
+                  className={`h-11 cursor-pointer rounded-xl border px-3 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 ${
+                    layout === option
+                      ? "border-slate-900 bg-slate-900 text-white"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
             </div>
           </div>
         </div>
