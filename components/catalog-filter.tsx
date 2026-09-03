@@ -101,7 +101,7 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
 
   return (
     <section aria-labelledby="catalog-heading" className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-      {/* Catalog heading and live result count. */}
+      {/* Catalog heading. */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="mb-1 text-xs font-bold tracking-[0.16em] text-teal-700 uppercase">
@@ -109,13 +109,10 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
           </p>
           <h2 id="catalog-heading" className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">Find your next phone</h2>
         </div>
-        <p aria-live="polite" className="text-sm font-medium text-slate-500">
-          {filteredProducts.length} {filteredProducts.length === 1 ? "phone" : "phones"}
-        </p>
       </div>
 
       {/* Search, category, clear, and layout controls. */}
-      <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_200px_auto] lg:items-end">
           <label className="block text-sm font-bold text-slate-700">
             Search phones
@@ -172,6 +169,10 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
           </div>
         </div>
       </div>
+
+      <p aria-live="polite" className="mt-3 mb-8 text-sm font-medium text-slate-500">
+        {filteredProducts.length} {filteredProducts.length === 1 ? "phone" : "phones"}
+      </p>
 
       {/* Show matching cards, or a useful empty state when no products match. */}
       {filteredProducts.length > 0 ? (
