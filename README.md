@@ -85,13 +85,7 @@ These are alternative authentication paths: a ChatGPT subscription does not beco
 
 1. Open this repository in VS Code and open the Codex sidebar. If needed, choose **Sign in with ChatGPT** on the signed-out screen and finish the browser flow. See the official [Codex authentication guide](https://learn.chatgpt.com/docs/auth.md).
 2. Commit or stash work you do not want an automated maintenance run to touch.
-3. Validate the four-node routing without authentication or file changes:
-
-   ```bash
-   npm run mas:dry-run -- "Describe the maintenance task"
-   ```
-
-4. Start a real run in the integrated terminal:
+3. Start a run in the integrated terminal:
 
    ```bash
    npm run mas -- "Fix the catalog filter reset behavior"
@@ -99,6 +93,6 @@ These are alternative authentication paths: a ChatGPT subscription does not beco
 
    You can also ask Codex in the sidebar: `Run npm run mas -- "<task>" in the integrated terminal, monitor the four roles, and summarize the final report.`
 
-5. Review the resulting diff in Source Control. The workflow prints each node as it starts and ends with Coordinator's final verified report or its remaining blockers.
+4. Review the resulting diff in Source Control. The workflow prints each node as it starts and ends with Coordinator's final verified report or its remaining blockers.
 
 The VS Code Command Palette also exposes Codex commands, and the sidebar gear opens shared Codex settings such as sandbox and model choices; see the official [IDE command reference](https://learn.chatgpt.com/docs/developer-commands.md?surface=ide).

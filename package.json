@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:a11y": "playwright test tests/accessibility.spec.ts",
-    "mas": "tsx mas/index.ts",
-    "mas:dry-run": "tsx mas/index.ts --dry-run"
+    "mas": "tsx mas/index.ts"
   },
   "dependencies": {
     "@langchain/core": "^1.2.9",
