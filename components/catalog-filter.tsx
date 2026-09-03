@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { FiRefreshCw, FiSearch, FiSliders } from "react-icons/fi";
+import { FiChevronDown, FiDollarSign, FiGrid, FiRefreshCw, FiSearch } from "react-icons/fi";
 
 import { useAuthentication } from "@/components/authentication";
 import { ProductCard } from "@/components/product-card";
@@ -129,7 +129,7 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
         </div>
       </div>
 
-      {/* Search, category, clear, and layout controls. */}
+      {/* Search and category filters. */}
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_200px_auto] lg:items-end">
           <label className="block text-sm font-bold text-slate-700">
@@ -168,48 +168,75 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
           </button>
         </div>
 
-        <div className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-end sm:justify-end">
-          <label className="block text-sm font-bold text-slate-700">
-            Sort by
-            <select
-              value={sortOrder}
-              onChange={(event) => {
-                if (isSortOrder(event.target.value)) {
-                  setSortOrder(event.target.value);
-                }
-              }}
-              className="mt-2 w-full cursor-pointer appearance-none rounded-xl border border-slate-300 bg-white px-3.5 py-3 font-normal outline-none transition focus:border-teal-600 focus:ring-3 focus:ring-teal-100 sm:w-52"
-            >
-              <option value="default">Default order</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-            </select>
+      </div>
+
+      {/* Result count and presentation controls sit outside the filter card. */}
+      <div className="my-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <p aria-live="polite" className="text-sm font-semibold text-slate-600">
+          <span className="text-slate-950">{filteredProducts.length}</span>{" "}
+          {filteredProducts.length === 1 ? "phone" : "phones"} found
+        </p>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+          <label className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-2 pr-3 shadow-sm transition hover:border-slate-300 hover:shadow-md focus-within:border-teal-600 focus-within:ring-3 focus-within:ring-teal-100">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+              <FiDollarSign aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-[0.65rem] leading-none font-bold tracking-[0.12em] text-slate-500 uppercase">
+                Sort by price
+              </span>
+              <span className="relative mt-1 block">
+                <select
+                  value={sortOrder}
+                  onChange={(event) => {
+                    if (isSortOrder(event.target.value)) {
+                      setSortOrder(event.target.value);
+                    }
+                  }}
+                  className="w-full cursor-pointer appearance-none rounded-lg border border-slate-200 bg-white py-1 pr-7 pl-2 text-sm font-bold text-slate-900 outline-none transition hover:border-slate-300 sm:w-40"
+                >
+                  <option value="default">Default order</option>
+                  <option value="price-asc">Low to high</option>
+                  <option value="price-desc">High to low</option>
+                </select>
+                <FiChevronDown
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-slate-400 transition group-focus-within:text-teal-700"
+                />
+              </span>
+            </span>
           </label>
 
-          <div className="flex flex-col gap-2">
-            <span className="flex items-center gap-2 text-sm font-bold text-slate-700"><FiSliders aria-hidden="true" /> Card layout</span>
-            <div className="grid grid-cols-2 rounded-xl bg-slate-100 p-1" aria-label="Product card layout">
-              {layouts.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => changeLayout(option)}
-                  aria-pressed={layout === option}
-                  className={`cursor-pointer rounded-lg px-3 py-2 text-xs font-bold transition sm:px-4 sm:text-sm ${
-                    layout === option ? "bg-white text-slate-950 shadow-sm" : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  {option}
-                </button>
-              ))}
+          <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-2 shadow-sm transition hover:border-slate-300 hover:shadow-md">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-700">
+              <FiGrid aria-hidden="true" />
+            </span>
+            <div>
+              <span className="block text-[0.65rem] leading-none font-bold tracking-[0.12em] text-slate-500 uppercase">
+                Card layout
+              </span>
+              <div className="mt-1 flex gap-1" role="group" aria-label="Product card layout">
+                {layouts.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => changeLayout(option)}
+                    aria-pressed={layout === option}
+                    className={`cursor-pointer rounded-lg px-2.5 py-1 text-xs font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 sm:px-3 ${
+                      layout === option
+                        ? "bg-slate-900 text-white shadow-sm"
+                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <p aria-live="polite" className="mt-3 mb-8 text-sm font-medium text-slate-500">
-        {filteredProducts.length} {filteredProducts.length === 1 ? "phone" : "phones"}
-      </p>
 
       {/* Show matching cards, or a useful empty state when no products match. */}
       {filteredProducts.length > 0 ? (
