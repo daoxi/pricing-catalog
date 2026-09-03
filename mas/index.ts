@@ -3,12 +3,31 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { Annotation, END, START, StateGraph } from "@langchain/langgraph";
-import { Codex, type SandboxMode } from "@openai/codex-sdk";
+import {
+  Codex,
+  type ModelReasoningEffort,
+  type SandboxMode,
+} from "@openai/codex-sdk";
 import { config as loadEnvFile } from "dotenv";
 
 type Worker = "researcher" | "programmer" | "tester";
+type Agent = "coordinator" | Worker;
 type Route = Worker | typeof END;
 type Stage = "new" | "researched" | "implemented" | "tests_failed" | "tests_passed";
+
+interface AgentRuntime {
+  model: "gpt-5.6-sol" | "gpt-5.6-terra";
+  reasoning: ModelReasoningEffort;
+}
+
+// Use flagship capacity for orchestration and implementation, a balanced model
+// for read-heavy research, and a different high-effort model for verification.
+const AGENT_RUNTIMES = {
+  coordinator: { model: "gpt-5.6-sol", reasoning: "high" },
+  researcher: { model: "gpt-5.6-terra", reasoning: "medium" },
+  programmer: { model: "gpt-5.6-sol", reasoning: "high" },
+  tester: { model: "gpt-5.6-terra", reasoning: "high" },
+} satisfies Record<Agent, AgentRuntime>;
 
 const MAX_REVISIONS = 2;
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -32,7 +51,6 @@ const State = Annotation.Root({
 });
 
 type WorkflowState = typeof State.State;
-type Agent = "coordinator" | Worker;
 
 // Run one role in a fresh Codex thread. Without an API key, Codex reuses the
 // local ChatGPT login shared by the CLI and VS Code extension.
@@ -43,8 +61,11 @@ async function runAgent(
   liveWeb = false,
 ): Promise<string> {
   const rolePrompt = await readFile(resolve(root, "agents", `${agent}.md`), "utf8");
+  const runtime = AGENT_RUNTIMES[agent];
   const thread = codex.startThread({
     approvalPolicy: "never",
+    model: runtime.model,
+    modelReasoningEffort: runtime.reasoning,
     sandboxMode,
     workingDirectory: root,
     skipGitRepoCheck: true,
