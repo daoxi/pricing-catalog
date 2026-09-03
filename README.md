@@ -40,6 +40,15 @@ npx tsc --noEmit
 npm run build
 ```
 
+Install Chromium once, then run the automated accessibility check:
+
+```bash
+npx playwright install chromium
+npm run test:a11y
+```
+
+Axe checks the rendered homepage for automatically detectable WCAG 2.1 Level A and AA violations. It does not replace manual accessibility testing.
+
 ## Maintenance multi-agent workflow
 
 The repository includes a deliberately small [LangGraph](https://docs.langchain.com/oss/javascript/langgraph/overview) workflow for future maintenance. Its only graph nodes are four role-based Codex agents:

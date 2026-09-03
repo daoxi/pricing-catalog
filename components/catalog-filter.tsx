@@ -160,7 +160,7 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
                 onClick={() => changeLayout(option)}
                 aria-pressed={layout === option}
                 className={`cursor-pointer rounded-lg px-3 py-2 text-xs font-bold transition sm:px-4 sm:text-sm ${
-                  layout === option ? "bg-white text-slate-950 shadow-sm" : "text-slate-500 hover:text-slate-900"
+                  layout === option ? "bg-white text-slate-950 shadow-sm" : "text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {option}
