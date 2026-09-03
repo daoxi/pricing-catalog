@@ -57,4 +57,36 @@ They are stored under `/agent/examples/`.
 - `/agent/examples/`: example commands and their real outputs.
 - `/AGENTS.md`: repository-wide coding instructions inherited by the roles.
 
+## Cost analysis
 
+With `OPENAI_API_KEY`, the workflow uses standard API billing. With a local
+ChatGPT login, it consumes the subscription's Codex allowance instead of
+creating a separate API charge.
+
+Standard API prices:
+
+| Model | Roles | Input / 1M tokens | Output / 1M tokens |
+| --- | --- | ---: | ---: |
+| [`gpt-5.6-sol`](https://developers.openai.com/api/docs/models/gpt-5.6-sol) | Coordinator, Programmer | $4.00 | $20.00 |
+| [`gpt-5.6-terra`](https://developers.openai.com/api/docs/models/gpt-5.6-terra) | Researcher, Tester | $2.00 | $12.00 |
+
+- A successful run uses 7 model calls: 5 Sol and 2 Terra.
+- Each repair adds 4 calls: 3 Sol and 1 Terra.
+- The two-repair maximum uses 15 calls: 11 Sol and 4 Terra.
+- Web search costs $0.01 per call plus search-content tokens and is available
+  only to Researcher. See [API pricing - Tools](https://developers.openai.com/api/docs/pricing#built-in-tools).
+
+As a rough API-key example, if every call uses 10,000 uncached input tokens and
+2,000 output tokens, a first-pass success costs about **$0.49** and a run using
+both repairs costs about **$1.06**, excluding searches. Actual cost varies with
+context, reasoning, tool use, cache hits, and output length.
+
+## Key limitations
+
+- The workflow is sequential, so every role and repair increases total latency.
+- Coordinator is the only router; weak or incomplete handoffs affect all later
+  roles.
+- The fixed pipeline always runs Researcher, Programmer, and Tester, even when a simpler task might not need every stage.
+- Tester has workspace-write access for generated artifacts; its restriction
+  against source edits is enforced by instructions rather than the sandbox.
+- The two-repair limit controls cost and looping but can stop a recoverable task before it is resolved.
