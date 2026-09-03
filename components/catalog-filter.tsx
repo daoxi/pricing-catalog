@@ -11,9 +11,14 @@ import type { CatalogLayout, Product } from "@/lib/catalog-types";
 const LAYOUT_STORAGE_KEY = "pricing-catalog-layout";
 const LAYOUT_CHANGE_EVENT = "pricing-catalog-layout-change";
 const requiredLayouts: CatalogLayout[] = ["Price First", "Specs First"];
+type SortOrder = "default" | "price-asc" | "price-desc";
 
 function isCatalogLayout(value: string | null): value is CatalogLayout {
   return value === "Price First" || value === "Specs First";
+}
+
+function isSortOrder(value: string): value is SortOrder {
+  return value === "default" || value === "price-asc" || value === "price-desc";
 }
 
 // Listen for layout changes made in this tab or another browser tab.
@@ -49,6 +54,7 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
   const { isAuthenticated } = useAuthentication();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("default");
   const layout = useSavedLayout(cmsLayouts[0] ?? "Price First");
 
   // Include CMS options first, then add either required option if it is not published.
@@ -84,6 +90,18 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
 
     return searchableText.includes(normalizedSearch);
   });
+
+  // Sort a copy so the filtered results and their original CMS order remain intact.
+  const sortedProducts =
+    sortOrder === "default"
+      ? filteredProducts
+      : [...filteredProducts].sort((firstProduct, secondProduct) => {
+          const firstPrice = isAuthenticated ? firstProduct.priceAuthenticated : firstProduct.priceLoggedOut;
+          const secondPrice = isAuthenticated ? secondProduct.priceAuthenticated : secondProduct.priceLoggedOut;
+          const priceDifference = firstPrice - secondPrice;
+
+          return sortOrder === "price-asc" ? priceDifference : -priceDifference;
+        });
 
   const hasFilters = Boolean(search) || category !== "All";
 
@@ -150,22 +168,41 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
           </button>
         </div>
 
-        <div className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <span className="flex items-center gap-2 text-sm font-bold text-slate-700"><FiSliders aria-hidden="true" /> Card layout</span>
-          <div className="grid grid-cols-2 rounded-xl bg-slate-100 p-1" aria-label="Product card layout">
-            {layouts.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => changeLayout(option)}
-                aria-pressed={layout === option}
-                className={`cursor-pointer rounded-lg px-3 py-2 text-xs font-bold transition sm:px-4 sm:text-sm ${
-                  layout === option ? "bg-white text-slate-950 shadow-sm" : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                {option}
-              </button>
-            ))}
+        <div className="mt-5 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-end sm:justify-end">
+          <label className="block text-sm font-bold text-slate-700">
+            Sort by
+            <select
+              value={sortOrder}
+              onChange={(event) => {
+                if (isSortOrder(event.target.value)) {
+                  setSortOrder(event.target.value);
+                }
+              }}
+              className="mt-2 w-full cursor-pointer appearance-none rounded-xl border border-slate-300 bg-white px-3.5 py-3 font-normal outline-none transition focus:border-teal-600 focus:ring-3 focus:ring-teal-100 sm:w-52"
+            >
+              <option value="default">Default order</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+            </select>
+          </label>
+
+          <div className="flex flex-col gap-2">
+            <span className="flex items-center gap-2 text-sm font-bold text-slate-700"><FiSliders aria-hidden="true" /> Card layout</span>
+            <div className="grid grid-cols-2 rounded-xl bg-slate-100 p-1" aria-label="Product card layout">
+              {layouts.map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => changeLayout(option)}
+                  aria-pressed={layout === option}
+                  className={`cursor-pointer rounded-lg px-3 py-2 text-xs font-bold transition sm:px-4 sm:text-sm ${
+                    layout === option ? "bg-white text-slate-950 shadow-sm" : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -177,7 +214,7 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
       {/* Show matching cards, or a useful empty state when no products match. */}
       {filteredProducts.length > 0 ? (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredProducts.map((product) => (
+          {sortedProducts.map((product) => (
             <ProductCard key={product.id} product={product} layout={layout} isAuthenticated={isAuthenticated} />
           ))}
         </div>
