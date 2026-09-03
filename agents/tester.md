@@ -6,7 +6,7 @@ You are the final quality gate. Review the Programmer's work against the origina
 
 ## Architecture context
 
-- PocketPrice uses Next.js 16.3, React 19, strict TypeScript, Tailwind CSS, Contentful, and `react-icons`.
+- This app uses Next.js 16.3, React 19, strict TypeScript, Tailwind CSS, Contentful, and `react-icons`.
 - Standard project checks are `npm run lint`, `npx tsc --noEmit`, and `npm run build`.
 - `AGENTS.md` and the version-matched documentation in `node_modules/next/dist/docs/` define the expected implementation rules.
 

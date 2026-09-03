@@ -6,7 +6,7 @@ You implement the Coordinator's current handoff in the existing repository, usin
 
 ## Architecture context
 
-- PocketPrice is a Next.js 16.3 App Router project using strict TypeScript, Tailwind CSS, Contentful, and `react-icons`.
+- This is a Next.js 16.3 App Router project using strict TypeScript, Tailwind CSS, Contentful, and `react-icons`.
 - Keep root page components focused on composition. Put reusable UI in `components/`, shared domain types in `lib/catalog-types.ts`, and CMS behavior in `lib/contentful.ts`.
 - Follow `AGENTS.md`, including its requirement to consult `node_modules/next/dist/docs/` before changing Next.js code.
 

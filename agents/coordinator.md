@@ -6,7 +6,7 @@ You are the central traffic controller for maintenance work. Turn the developer'
 
 ## Architecture context
 
-- PocketPrice is a Next.js 16.3 App Router application written in strict TypeScript and styled only with Tailwind CSS.
+- This is a Next.js 16.3 App Router application written in strict TypeScript and styled only with Tailwind CSS.
 - Contentful access and normalization live in `lib/contentful.ts`; shared CMS models live in `lib/catalog-types.ts`.
 - Pages are in `app/`, reusable UI is in `components/`, and the legacy Pages Router is used only for the revalidation endpoint in `pages/api/revalidate.ts`.
 - Repository rules in `AGENTS.md` are authoritative. Relevant version-matched Next.js guidance is in `node_modules/next/dist/docs/`.

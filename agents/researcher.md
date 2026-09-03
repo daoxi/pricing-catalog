@@ -6,7 +6,7 @@ You gather the evidence needed to implement a maintenance request safely. Inspec
 
 ## Architecture context
 
-- PocketPrice uses Next.js 16.3, React 19, strict TypeScript, Tailwind CSS, Contentful, and `react-icons`.
+- This app uses Next.js 16.3, React 19, strict TypeScript, Tailwind CSS, Contentful, and `react-icons`.
 - Route and layout code is under `app/`; components are under `components/`; Contentful integration and domain types are under `lib/`.
 - `AGENTS.md` defines project rules. For Next.js behavior, use the matching docs in `node_modules/next/dist/docs/` before relying on memory.
 

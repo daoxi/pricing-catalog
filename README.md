@@ -1,4 +1,4 @@
-# PocketPrice
+# Pricing Catalog
 
 A statically generated smartphone pricing catalog built with Next.js, Contentful, TypeScript, and Tailwind CSS.
 
