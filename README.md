@@ -65,5 +65,5 @@ See `AGENT.md` for more information.
 ## What I would improve
 - Add pagination or infinite scrolling as the product catalog grows.
 - Add unit and integration tests for filtering, authentication, and revalidation behavior.
-- For the multi-agent system, optimize the workflow to allow agents work in parallel, allow human intervention while the workflow is still running.
+- For the multi-agent system, split the programmer role into a few more specialized dev roles and run them in parallel in the workflow, allow human intervention while the workflow is still running.
 
