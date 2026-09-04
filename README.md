@@ -13,15 +13,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Contentful ISR webhook
-The pricing info is required to be server-rendered for this app, so I decided to implement  
+## SSR/SSG Approach (Contentful ISR webhook)
+The pricing info is required to be server-rendered for this app, so I decided to implement on-demand Incremental Static Regeneration (ISR) for Contentful changes, because ISR has the performance of SSG (Static Site Generation) and flexibility of traditional SSR (Server-Side Rendering).
 
-The catalog uses on-demand regeneration for Contentful changes. Create a Contentful webhook with:
-
+Create a Contentful webhook with:
 - Method: `POST`
 - URL: `https://YOUR_DOMAIN/api/revalidate?secret=YOUR_CONTENTFUL_REVALIDATE_SECRET`
 - Triggers: publish, unpublish
-- Payload: customize the webhook payload to include product slug:
+- Payload: customize the webhook payload to include the product slug, structured like the following:
 ```
 {
   "fields": {
@@ -32,15 +31,7 @@ The catalog uses on-demand regeneration for Contentful changes. Create a Content
 }
 ```
 
-Product events revalidate the homepage and the matching `/products/{slug}` page. Layout Option events revalidate the homepage.
-
-For local testing, use:
-
-```text
-http://localhost:3000/api/revalidate?secret=YOUR_CONTENTFUL_REVALIDATE_SECRET
-```
-
-Do not expose the secret in client-side code or commit it to the repository.
+When triggered, this webhook will revalidate the homepage and the matching `/products/{slug}` page, causing them to be re-rendered on the server side.
 
 ## Validation
 
@@ -50,14 +41,14 @@ npx tsc --noEmit
 npm run build
 ```
 
-Install Chromium once, then run the automated accessibility check:
+Install Chromium (for Playwright) once, then run the automated accessibility check:
 
 ```bash
 npx playwright install chromium
 npm run test:a11y
 ```
 
-Axe checks the rendered homepage for automatically detectable WCAG 2.1 Level A and AA violations. It does not replace manual accessibility testing.
+The Playwright setup uses Axe which checks the rendered homepage for automatically detectable WCAG 2.1 Level A and AA violations.
 
 ## AI multi-agent development system
 See `AGENT.md` for more information.
