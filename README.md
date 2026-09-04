@@ -35,13 +35,12 @@ Create a Contentful webhook with:
 }
 ```
 
-When triggered, this webhook will revalidate the homepage and the matching `/products/{slug}` page, causing them to be re-rendered on the server side.
+When auto-triggered, this webhook will revalidate the homepage and the matching `/products/{slug}` page, causing them to be re-rendered on the server side.
 
 ## Validation
 
 ```bash
 npm run lint
-npx tsc --noEmit
 npm run build
 ```
 
@@ -52,7 +51,7 @@ npx playwright install chromium
 npm run test:a11y
 ```
 
-The Playwright setup uses Axe which checks the rendered homepage for automatically detectable WCAG 2.1 Level A and AA violations.
+The Playwright setup uses Axe which checks the rendered page for automatically detectable WCAG 2.1 Level A and AA violations.
 
 ## AI multi-agent development system
 See `AGENT.md` for more information.

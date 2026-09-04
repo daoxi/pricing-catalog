@@ -3,9 +3,7 @@
 ## Overview
 
 This multi-agent system (MAS) is designed for future maintenance/development of this catalog app. The workflow in `mas/index.ts` is a coordinator-led LangGraph state
-machine. It defines four logical roles: one Coordinator and three workers. The
-workflow runs sequentially; the roles are not four persistent or concurrent
-processes.
+machine. It defines 4 logical roles: 1 Coordinator and 3 workers. The workflow runs sequentially for more predictable outputs; the roles are not four persistent or concurrent processes.
 
 ## Hierarchy
 
