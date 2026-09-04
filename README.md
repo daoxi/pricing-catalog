@@ -58,3 +58,6 @@ npm run test:a11y
 ```
 
 Axe checks the rendered homepage for automatically detectable WCAG 2.1 Level A and AA violations. It does not replace manual accessibility testing.
+
+## AI multi-agent development system
+See `AGENT.md` for more information.
