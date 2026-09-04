@@ -2,6 +2,10 @@
 
 A smartphone pricing catalog built with Next.js, Contentful, TypeScript, and Tailwind CSS.
 
+Deployed live on Vercel at:
+
+[https://pricing-catalog.vercel.app](http://pricing-catalog.vercel.app)
+
 ## Local development
 
 Copy `.env.example` to `.env.local`, add the credentials (contact me if you need them for demo purpose), then run:
@@ -52,3 +56,15 @@ The Playwright setup uses Axe which checks the rendered homepage for automatical
 
 ## AI multi-agent development system
 See `AGENT.md` for more information.
+
+## Architecture decisions
+
+- Contentful is the source of data for products info and layout options, static rendering with on-demand ISR is used, providing fast pages while allowing Contentful webhooks to refresh changed content.
+- Next.js codebase is broken into smaller and reusable components to keep it organized, and Tailwind CSS provides all component styling.
+- For architecture decisions for the multi-agent development system, refer to `AGENT.md`.
+
+## What I would improve
+- Add pagination or infinite scrolling as the product catalog grows.
+- Add unit and integration tests for filtering, authentication, and revalidation behavior.
+- For the multi-agent system, optimize the workflow to allow agents work in parallel, allow human intervention while the workflow is still running.
+
