@@ -48,7 +48,7 @@ npm run mas -- "Enter your prompt here"
 
 ## Example outputs 
 
-They are stored under `/agent/examples/`.
+Example commands and their real outputs are stored under `/agent/examples/`.
 
 ## Files/directories layout
 
