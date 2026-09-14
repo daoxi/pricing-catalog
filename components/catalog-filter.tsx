@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { FiChevronDown, FiDollarSign, FiGrid, FiRefreshCw, FiSearch } from "react-icons/fi";
 
 import { useAuthentication } from "@/components/authentication";
@@ -9,7 +9,6 @@ import type { CatalogLayout, Product } from "@/lib/catalog-types";
 
 // Layout selection is browser-only UI state that should survive page refreshes.
 const LAYOUT_STORAGE_KEY = "pricing-catalog-layout";
-const LAYOUT_CHANGE_EVENT = "pricing-catalog-layout-change";
 const requiredLayouts: CatalogLayout[] = ["Price First", "Specs First"];
 type SortOrder = "default" | "price-asc" | "price-desc";
 
@@ -19,30 +18,6 @@ function isCatalogLayout(value: string | null): value is CatalogLayout {
 
 function isSortOrder(value: string): value is SortOrder {
   return value === "default" || value === "price-asc" || value === "price-desc";
-}
-
-// Listen for layout changes made in this tab or another browser tab.
-function subscribeToLayout(onChange: () => void) {
-  window.addEventListener(LAYOUT_CHANGE_EVENT, onChange);
-  window.addEventListener("storage", onChange);
-
-  return () => {
-    window.removeEventListener(LAYOUT_CHANGE_EVENT, onChange);
-    window.removeEventListener("storage", onChange);
-  };
-}
-
-// Read localStorage through React's external-store API so hydration can keep the
-// CMS layout in static HTML, then safely switch to the saved browser preference.
-function useSavedLayout(defaultLayout: CatalogLayout) {
-  return useSyncExternalStore(
-    subscribeToLayout,
-    () => {
-      const storedLayout = window.localStorage.getItem(LAYOUT_STORAGE_KEY);
-      return isCatalogLayout(storedLayout) ? storedLayout : defaultLayout;
-    },
-    () => defaultLayout,
-  );
 }
 
 interface CatalogFilterProps {
@@ -55,10 +30,24 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sortOrder, setSortOrder] = useState<SortOrder>("default");
-  const layout = useSavedLayout(cmsLayouts[0] ?? "Price First");
+  // Start with the CMS layout so the server and browser render the same HTML.
+  const [layout, setLayout] = useState<CatalogLayout>(cmsLayouts[0] ?? "Price First");
 
-  // Include CMS options first, then add either required option if it is not published.
+  // After hydration, restore a valid saved browser preference as a non-urgent update.
+  useEffect(() => {
+    const storedLayout = window.localStorage.getItem(LAYOUT_STORAGE_KEY);
+
+    if (isCatalogLayout(storedLayout)) {
+      startTransition(() => setLayout(storedLayout)); // startTransition will mark it as non-urgent
+    }
+  }, []);
+
+  // Keep published CMS layouts in their original order, then ensure both supported
+  // layouts are available. Set removes duplicates when the CMS already includes them.
   const layouts = Array.from(new Set([...cmsLayouts, ...requiredLayouts]));
+
+  // Extract the category from every product, remove duplicate names, and sort the
+  // remaining categories alphabetically for the filter menu.
   const categories = Array.from(new Set(products.map((product) => product.category))).sort();
   const normalizedSearch = search.trim().toLowerCase();
 
@@ -76,6 +65,7 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
       return true;
     }
 
+		// Create all the available text from product details to be searched  
     const searchableText = [
       product.title,
       product.description,
@@ -84,7 +74,7 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
       product.attributes.chipset,
       product.attributes.battery,
     ]
-      .filter(Boolean)
+      .filter(Boolean) // .filter(Boolean) is used to remove null and undefined values from an array.
       .join(" ")
       .toLowerCase();
 
@@ -111,10 +101,10 @@ export function CatalogFilter({ products, cmsLayouts }: CatalogFilterProps) {
     setCategory("All");
   }
 
-  // Update the cards immediately and remember the choice for the next visit.
+  // State updates the cards immediately; localStorage remembers the next visit.
   function changeLayout(nextLayout: CatalogLayout) {
+    setLayout(nextLayout);
     window.localStorage.setItem(LAYOUT_STORAGE_KEY, nextLayout);
-    window.dispatchEvent(new Event(LAYOUT_CHANGE_EVENT));
   }
 
   return (
