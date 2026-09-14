@@ -1,3 +1,4 @@
+// Keep the Contentful SDK and credentials out of client bundles by rejecting client imports.
 import "server-only";
 
 import { createClient } from "contentful";
@@ -11,6 +12,7 @@ import type {
   SmartphoneAttributes,
 } from "@/lib/catalog-types";
 
+// Validate untyped CMS response values before they cross into normalized domain data.
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
@@ -47,6 +49,7 @@ function getNumber(value: unknown, key: string): number | undefined {
 }
 
 function normalizeImage(value: unknown, productTitle: string): ProductImageData | undefined {
+  // Traverse the Contentful asset shape before normalizing its file and image metadata.
   const fields = getRecord(value, "fields");
   const file = getRecord(fields, "file");
   const rawUrl = getString(file, "url");
@@ -59,6 +62,7 @@ function normalizeImage(value: unknown, productTitle: string): ProductImageData 
   const dimensions = getRecord(details, "image");
 
   return {
+    // Contentful may return protocol-relative URLs; metadata falls back to usable display defaults.
     url: rawUrl.startsWith("//") ? `https:${rawUrl}` : rawUrl,
     alt: getString(fields, "description") ?? getString(fields, "title") ?? productTitle,
     width: getNumber(dimensions, "width") ?? 800,
@@ -67,6 +71,7 @@ function normalizeImage(value: unknown, productTitle: string): ProductImageData 
 }
 
 function normalizeAttributes(value: unknown): SmartphoneAttributes {
+  // Preserve absent optional specifications as undefined instead of inventing CMS values.
   return {
     weight: getString(value, "weight"),
     build: getString(value, "build"),
@@ -80,6 +85,7 @@ function normalizeAttributes(value: unknown): SmartphoneAttributes {
 }
 
 function normalizeProduct(entry: unknown): Product | undefined {
+  // This is the CMS-to-domain boundary: validate required fields and allowed values first.
   const sys = getRecord(entry, "sys");
   const fields = getRecord(entry, "fields");
   const id = getString(sys, "id");
@@ -119,6 +125,7 @@ function normalizeProduct(entry: unknown): Product | undefined {
 
 function normalizeLayout(entry: unknown): CatalogLayout | undefined {
   const layout = getString(getRecord(entry, "fields"), "layout");
+  // Allowlist CMS values so every result satisfies the CatalogLayout domain contract.
   return layout === "Price First" || layout === "Specs First" ? layout : undefined;
 }
 
@@ -126,6 +133,7 @@ async function fetchCatalogData(): Promise<CatalogData> {
   const space = process.env.CONTENTFUL_SPACE_ID;
   const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
+  // Validate credentials early and preserve the catalog's stable error-shaped response.
   if (!space || !accessToken) {
     console.error("Contentful credentials are not configured.");
     return { status: "error", products: [], layouts: [] };
@@ -133,11 +141,13 @@ async function fetchCatalogData(): Promise<CatalogData> {
 
   try {
     const client = createClient({ space, accessToken });
+    // Fetch independent content types in parallel to avoid serial CMS latency.
     const [productEntries, layoutEntries] = await Promise.all([
       client.getEntries({ content_type: "product", include: 1 }),
       client.getEntries({ content_type: "layoutOption" }),
     ]);
 
+    // Normalize and filter malformed entries without failing the otherwise valid response.
     const products = productEntries.items
       .map(normalizeProduct)
       .filter((product): product is Product => product !== undefined);
@@ -147,6 +157,7 @@ async function fetchCatalogData(): Promise<CatalogData> {
 
     return { status: "success", products, layouts };
   } catch (error: unknown) {
+    // Keep diagnostic detail server-side while returning a safe result for the UI.
     const message = error instanceof Error ? error.message : "Unknown Contentful error";
     console.error(`Unable to load the Contentful catalog: ${message}`);
     return { status: "error", products: [], layouts: [] };
