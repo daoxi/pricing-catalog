@@ -53,14 +53,14 @@ npm run test:a11y
 
 The Playwright setup uses Axe which checks the rendered page for automatically detectable WCAG 2.1 Level A and AA violations.
 
-## AI multi-agent development system
-See `AGENT.md` for more information.
+## AI multi-agent system (MAS) for development
+See `MAS.md` for more information.
 
 ## Architecture decisions
 
 - Contentful is the source of data for products info and layout options, static rendering with on-demand ISR is used, providing fast pages while allowing Contentful webhooks to refresh changed content.
 - To keep everything organized and scalable, the codebase is broken into smaller and reusable components according to their purpose (e.g. Contentful access isolated in /lib/, reusable UI in /components/, an ISR webhook setup under /pages/api/, etc.), and Tailwind CSS provides all component styling.
-- For architecture decisions for the multi-agent development system, refer to `AGENT.md`.
+- For architecture decisions for the multi-agent development system, refer to `MAS.md`.
 
 ## What I would improve
 - Add pagination or infinite scrolling as the product catalog grows.
